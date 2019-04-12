@@ -7,8 +7,10 @@ import store from './store'
 
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
+import Element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css';
 
-Vue.use(VueMaterial)
+Vue.use(Element)
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios

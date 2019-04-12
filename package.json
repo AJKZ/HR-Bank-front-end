@@ -1,7 +1,7 @@
 {
   "name": "project_gui",
-  "version": "0.0.1",
-  "author": "",
+  "version": "1.1.0",
+  "author": "Alan",
   "description": "An electron-vue project",
   "license": null,
   "main": "./dist/electron/main.js",
@@ -14,7 +14,8 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-    "postinstall": ""
+    "postinstall": "",
+    "install": "electron-rebuild"
   },
   "build": {
     "productName": "project_gui",
@@ -52,6 +53,10 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "element-ui": "^2.7.2",
+    "johnny-five": "^1.0.0",
+    "serialport": "^7.1.4",
+    "temporal": "^0.7.1",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-material": "^1.0.0-beta-10.2",
@@ -76,12 +81,13 @@
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron": "^2.0.4",
+    "electron-builder": "^20.19.2",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",
-    "electron-builder": "^20.19.2",
-    "mini-css-extract-plugin": "0.4.0",
+    "electron-rebuild": "^1.8.4",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "0.4.0",
     "multispinner": "^0.2.1",
     "node-loader": "^0.6.0",
     "node-sass": "^4.9.2",
@@ -92,8 +98,8 @@
     "vue-loader": "^15.2.4",
     "vue-style-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.16",
-    "webpack-cli": "^3.0.8",
     "webpack": "^4.15.1",
+    "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4",
     "webpack-hot-middleware": "^2.22.2",
     "webpack-merge": "^4.1.3"
