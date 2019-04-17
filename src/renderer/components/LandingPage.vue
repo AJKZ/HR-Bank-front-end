@@ -15,10 +15,10 @@
 
       <div style="margin-top: 80px; height: 60px;">
         <transition name="el-fade-in-linear">
-          <div v-show="cardScanned">
-            <el-row class="input-row">
-              <el-col class="pin-pass-box" :offset="3" :span="2">
-                <h1 class="pin-dot" v-if="notEmpty(0)">•</h1>
+          <div v-show="cardScanned" class="input-row">
+            <el-row>
+              <el-col class="pin-pass-box" :offset="6" :span="2">
+                <h1 class="pin-dot" v-if="notEmpty(0)" >•</h1>
 
               </el-col>
               <el-col class="pin-pass-box" :offset="1" :span="2">
@@ -50,16 +50,18 @@
       <div class="side-menu-bg">
         <img src="../assets/SBER_icon.png" alt="logo" class="logo-icon">
 
-        <div class="menu-button">[A] </div>
-        <div class="menu-button">[B] </div>
-        <div class="menu-button">[C] </div>
-        <div class="menu-button">[D] </div>
+        <div class="button-type-2">[A] Quick Cash</div>
+        <div class="button-type-2">[B] Check Balance</div>
+        <div class="button-type-2">[C] Withdraw</div>
+        <div class="button-type-1">[D] Log out</div>
 
         <el-button @click="loggedIn = false; cardScanned = false" class="logout-button">
-          temporary logout button
+          [D] Log out
         </el-button>
       </div>
+      <div class="main-bg">
 
+      </div>
 
 
       <img src="../assets/SBER_text.png" alt="logo" class="logo_loggedIn">
@@ -68,25 +70,26 @@
 </template>
 
 <script>
+  import axios from 'axios';
   const SerialPort = require('serialport');
   const Readline = require('@serialport/parser-readline')
 
   const port = new SerialPort('COM10', { baudRate: 9600 });
-
+  const parser = port.pipe(new Readline({ delimiter: '\r\n' }));
 
   export default {
     name: 'landing-page',
 
     data() {
       return {
-        cardScanned: true,
+        cardScanned: false,
         inputCount: 0,
         pinAttempt: 0,
         loggedIn: false,
         0: '',
         1: '',
         2: '',
-        3: ''
+        3: '',
       }
     },
 
@@ -105,11 +108,54 @@
 
       resetPinAttempt() {
         this.pinAttempt = 0;
+      },
+
+      login() {
+        this.loggedIn = true;
+      },
+
+      testlogin() {
+        const accountNumber = '';
       }
     },
 
     mounted() {
-      const parser = new Readline();
+      parser.on("data", (data) => {
+        if(data === ' 60 6C 0C A3') {
+          console.log(data);
+          this.cardScanned = true;
+        }
+
+        if(data.length === 1) {
+          console.log(data);
+          
+          if(!isNaN(data)) {
+            if(this.inputCount < 4) {
+              this[this.inputCount] = data;
+              this.inputCount++;
+            }
+          }
+          if(data === 'A') {
+            this.login();
+          }
+          if(data === 'B') {
+            console.log(data);
+          }
+          if(data === 'C') {
+            this.inputCount--;
+            this[this.inputCount] = '';
+          }
+          if(data === 'D') {
+            if(this.loggedIn == false && this.cardScanned == true) {
+              this.cardScanned = false;
+            }
+            if(this.loggedIn == true) {
+              this.loggedIn = false;
+              this.cardScanned = false;
+            }
+          }
+        }
+      });
     }
   }
 </script>
@@ -152,16 +198,18 @@
   .pin-dot{
     text-align: center;
     padding-top: 0px;
-    margin-top: 0px;
-    font-size: 130px;
+    margin-top: 44px;
+    font-size: 70px;
     margin-bottom: 0;
   }
 
-  .input-row{
-  }
+  /* .input-row{
+    margin-left: auto;
+    margin-right: auto;
+  } */
 
   .pin-pass-box{
-    height: 120px;
+    height: 108px;
     -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
@@ -193,7 +241,18 @@
     margin-bottom: 18px;
   }
 
-  .menu-button {
+  .button-type-1 {
+    margin: 30px;
+    padding: 20px;
+    background: lightgrey;
+    box-shadow: 4px 5px 9px  black;
+
+    font-size: 20px;
+    color: black;
+    text-shadow: 1px 1px grey;
+  }
+
+  .button-type-2 {
     margin: 30px;
     padding: 20px;
     background: #1f9d59;
@@ -201,7 +260,7 @@
 
     font-size: 20px;
     color: white;
-    text-shadow: 1px 1px #000;
+    text-shadow: 2px 1px #000;
   }
 
   .cancel-button {
