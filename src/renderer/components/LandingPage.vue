@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-button @click="cardScanned = true">Replicate card scan</el-button>
-    <el-button @click="loggedIn = true">Replicate log in</el-button>
+    <el-button v-show="!loggedIn" @click="cardScanned = true">Scan card</el-button>
+    <el-button v-show="!loggedIn" @click="loggedIn = true">Log in</el-button>
 
     <div v-if="!loggedIn">
       <img src="../assets/SBER_logo.png" alt="logo" class="welcome_logo">
@@ -56,11 +56,18 @@
         <div class="button-type-1">[D] Log out</div>
 
         <el-button @click="loggedIn = false; cardScanned = false" class="logout-button">
-          [D] Log out
+          Log out
         </el-button>
       </div>
       <div class="main-bg">
-
+        <div>
+          <transition name="el-fade-in-linear">
+            <div v-show="menuCash" class="menuCash">
+              <div style="position: absolute;
+              background-color: black; width: 1000px; height: 20px;"></div>
+            </div>
+          </transition>
+        </div>
       </div>
 
 
@@ -90,6 +97,9 @@
         1: '',
         2: '',
         3: '',
+        menuCash: false,
+        menuBalance: false,
+        menuWithdraw: false,
       }
     },
 
@@ -116,17 +126,82 @@
 
       testlogin() {
         const accountNumber = '';
+      },
+
+      login2() {
+        const tempAccountNumber = 'RU02SBERaccount3';
+        const loginRoute = 'http://localhost:8080/login'
+
+        axios.post(loginRoute, {
+          iban: tempAccountNumber,
+          pin: '3333',
+        }, { headers: {  } })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((response) => {
+          console.log(response)
+        })
+      },
+
+      quickCash() {
+        const tempAccountNumber = 'RU02SBERaccount3';
+        const loginRoute = 'http://localhost:8080/withdraw'
+
+        axios.post(loginRoute, {
+          iban: tempAccountNumber,
+          amount: 10,
+        }, { headers: {  } })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((response) => {
+          console.log(response)
+        })
+      },
+
+      getBalance() {
+        const tempAccountNumber = 'RU02SBERaccount3';
+        const loginRoute = 'http://localhost:8080/getbalance'
+
+        axios.post(loginRoute, {
+          iban: tempAccountNumber,
+          pin: '3333'
+        }, { headers: {  } })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((response) => {
+          console.log(response)
+        })
+      },
+
+      withdraw() {
+        const tempAccountNumber = 'RU02SBERaccount3';
+        const loginRoute = 'http://localhost:8080/withdraw'
+
+        axios.post(loginRoute, {
+          iban: tempAccountNumber,
+          amount: 2,
+        }, { headers: {  } })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((response) => {
+          console.log(response)
+        })
       }
     },
 
     mounted() {
       parser.on("data", (data) => {
+        console.log(data);
         if(data === ' 60 6C 0C A3') {
           console.log(data);
           this.cardScanned = true;
         }
 
-        if(data.length === 1) {
+        if(data.length === 1 && !this.loggedIn) {
           console.log(data);
           
           if(!isNaN(data)) {
@@ -152,6 +227,47 @@
             if(this.loggedIn == true) {
               this.loggedIn = false;
               this.cardScanned = false;
+            }
+          }
+        }
+
+        if(data.length === 1 && this.loggedIn) {
+          if(data === '#') {
+            this.login2();
+          }
+          if(data === 'A') {
+            this.menuCash = true;
+            this.menuBalance = false;
+            this.menuWithdraw = false;
+            this.quickCash();
+          }
+          if(data === 'B') {
+            this.menuCash = false;
+            this.menuBalance = true;
+            this.menuWithdraw = false;
+            this.getBalance();
+          }
+          if(data === 'C') {
+            this.menuCash = false;
+            this.menuBalance = false;
+            this.menuWithdraw = true;
+            this.withdraw();
+          }
+          if(data === 'D') {
+            if(this.loggedIn == false && this.cardScanned == true) {
+              this.cardScanned = false;
+
+              this.menuCash = false;
+              this.menuBalance = false;
+              this.menuWithdraw = false;
+            }
+            if(this.loggedIn == true) {
+              this.loggedIn = false;
+              this.cardScanned = false;
+
+              this.menuCash = false;
+              this.menuBalance = false;
+              this.menuWithdraw = false;
             }
           }
         }
@@ -261,6 +377,24 @@
     font-size: 20px;
     color: white;
     text-shadow: 2px 1px #000;
+  }
+
+  .main_bg {
+    width: 1000;
+    height: 100vh;
+    float: right;
+  }
+
+  .menuCash {
+
+  }
+
+  .menuBalance {
+
+  }
+
+  .menuWithdraw {
+
   }
 
   .cancel-button {
