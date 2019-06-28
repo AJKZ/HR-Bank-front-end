@@ -815,7 +815,7 @@
     width: 120px;
     height: 54px;
     padding: 16px;
-    font-size: 
+    font-size: 50px;
   }
 
   .receipt-yes {
