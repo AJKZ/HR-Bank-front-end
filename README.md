@@ -29,4 +29,4 @@ Personal first time working on electron-vue platform.
 
 An interface that simulates an ATM system. 
 
-Has functionality for checking user account balance and withdrawing (fake) money. <br>Uses HTTP requests to communicate with a back-end. 
+Has functionality for checking user account balance and withdrawing (fake) money. <br>Uses HTTP requests to communicate with back-end. 
