@@ -1,4 +1,4 @@
-# project_gui
+# Bank front-end (ATM)
 
 > An electron-vue project
 
