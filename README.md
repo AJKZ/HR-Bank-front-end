@@ -20,3 +20,13 @@ npm run build
 ---
 
 This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
+
+---
+
+### School project
+
+Personal first time working on electron-vue platform. 
+
+An interface that simulates an ATM system. 
+
+Has functionality for checking user account balance and withdrawing (fake) money. <br>Uses HTTP requests to communicate with a back-end. 
