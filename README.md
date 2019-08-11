@@ -25,7 +25,7 @@ This project was generated with [electron-vue](https://github.com/SimulatedGREG/
 
 ### School project
 
-Personal first time working on electron-vue platform. 
+First personal electron-vue project. 
 
 An interface that simulates an ATM system. 
 
